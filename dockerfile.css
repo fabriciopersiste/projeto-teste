@@ -1,0 +1,20 @@
+# Imagem base Ubuntu
+FROM ubuntu:latest 
+
+#Atualização de pacotes e intalação o Apache e o PHP
+RUN apt-get upadate &&\
+    apt-get install -y apache2 PHP
+
+# Copie os arquivos do seu aplicativo para o diretório raiz do Apache
+COPY ./meu-aplicativo /var/www/html
+
+# Defina a variável de ambiente para o PHP configurar o Apache corretamente
+ENV APACHE_RUN_USER www-data
+ENV APACHE_RUN_GROUP www-data
+ENV APACHE_LOG_DIR /var/log/apache2
+
+# Exponha a porta 80 para acessar o servidor web
+EXPOSE 80
+
+# Inicie o Apache quando o contêiner for iniciado
+CMD ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
